@@ -1,1 +1,69 @@
+import csv
+import matplotlib.pyplot as plt
+
+# Initialize variables to store data from column 6 and 8
+intRate = []
+grade = []
+
+# Path to the CSV file
+csv_file_path = 'test-files/loanfull.csv'
+
+# Open the CSV file and read its contents
+with open(csv_file_path, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+
+    # Skip the header row
+    next(csv_reader)
+
+    # Loop through each row in the CSV file
+    for line_count, row in enumerate(csv_reader):
+        # Check if the row has at least 9 columns (0-based index)
+        if len(row) >= 9:
+            int_rate = float(row[6])  # Column 6 (0-based index) - Convert to float for plotting
+            grade_value = row[8]    # Column 8 (0-based index)
+
+            # Check the condition: if grade_value is not 'A' and int_rate is less than 7
+            if grade_value != 'A' and int_rate < 7:
+                continue  # Skip this row and move to the next iteration
+
+            # Append int_rate and grade_value to the respective lists
+            intRate.append(int_rate)
+            grade.append(grade_value)
+
+# Sort the intRate and grade values simultaneously
+intRate, grade = zip(*sorted(zip(intRate, grade)))
+
+# Ask the user for the grade
+user_grade = input("Enter the grade (A, B, C, D, E, F, G): ")
+
+# Create a scatter plot
+plt.figure(figsize=(10, 6))
+plt.scatter(intRate, grade, marker='o', alpha=0.7, edgecolors='k', label='Data Points')
+
+# Plot the assumption point (red dot) for the user's grade
+if user_grade in {'A', 'B', 'C', 'D', 'E', 'F', 'G'}:
+    # Assume interest rate based on the user's grade (You can adjust these assumptions as needed)
+    assumption_int_rate = 7.0 if user_grade == 'A' else 10.0
+    plt.scatter(assumption_int_rate, user_grade, marker='o', color='red', label='Assumption')
+
+# Annotate the red dot with the interest rate
+# plt.text(assumption_int_rate, user_grade, f'intRate={assumption_int_rate}',
+#          color='red', fontsize=10, ha='left', va='center')
+
+# Set labels and title
+plt.xlabel('intRate')
+plt.ylabel('grade')
+plt.title('Scatter Plot: intRate vs grade (Sorted by intRate and grade)')
+
+# Show the legend
+plt.legend()
+
+# Set the text for the assumption outside the scatter plot
+assumption_text = f'Assumption: intRate={assumption_int_rate}'
+plt.text(0.98, 0.02, assumption_text, transform=plt.gca().transAxes, fontsize=10,
+         color='red', ha='right', va='bottom', bbox=dict(facecolor='white', edgecolor='red', boxstyle='round,pad=0.3'))
+
+# Show the plot
+plt.tight_layout()
+plt.show()
 
