@@ -1,0 +1,30 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
+loan_data = pd.read_csv("loanfull.csv")
+critical_columns = loan_data[['loan_amnt', 'funded_amnt', 'term', 'int_rate', 'installment', 'grade',
+                      'emp_length', 'home_ownership', 'loan_status', 'addr_state', 'dti',
+                      'delinq_2yrs', 'open_acc', 'total_acc', 'application_type']]
+print(critical_columns)
+
+# Sort the data according to alphabetical order
+loan_data_sorted = critical_columns.sort_values(by = 'grade')
+print(loan_data_sorted)
+
+# Read application and term column
+loan_data = pd.read_csv("loanfull.csv")
+application = loan_data['application_type'].unique()
+print(application)
+term = loan_data['term'].unique()
+print(term)
+
+# Make a new updated csv file that removed useless columns
+kept_columns = ['loan_amnt', 'funded_amnt', 'term', 'int_rate', 'installment', 'grade',
+                      'emp_length', 'home_ownership', 'loan_status', 'addr_state', 'dti',
+                      'delinq_2yrs', 'open_acc', 'total_acc', 'application_type']
+cleaned_loan_data = loan_data[kept_columns]
+cleaned_loan_data_sorted = cleaned_loan_data.sort_values(by = 'grade')
+cleaned_loan_data_sorted.to_csv("new_loanfull.csv", index = False)
