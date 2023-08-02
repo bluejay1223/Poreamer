@@ -4,6 +4,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 
+# Print out the useful columns only
+
 loan_data = pd.read_csv("loanfull.csv")
 critical_columns = loan_data[['loan_amnt', 'funded_amnt', 'term', 'int_rate', 'installment', 'grade',
                       'emp_length', 'home_ownership', 'loan_status', 'addr_state', 'dti',
